@@ -1,0 +1,66 @@
+<!-- edit-task-modal.component.html -->
+<h2 mat-dialog-title>Edit Task</h2>
+<mat-dialog-content class="mat-time-modal">
+  <form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
+    <div class="container">
+
+
+      <div class="row">
+
+ 
+        <mat-form-field>
+          <mat-label>Task</mat-label>
+          <textarea matInput formControlName="task" required></textarea>
+        </mat-form-field>
+      </div>
+      <div class="row">
+    <mat-form-field>
+      <mat-label>Event Type</mat-label>
+      <mat-select formControlName="eventType" required>
+        <mat-option value="Meeting">Meeting</mat-option>
+        <mat-option value="Development">Development</mat-option>
+        <mat-option value="Testing">Testing</mat-option>
+        <mat-option value="Review">Review</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  
+    <mat-form-field>
+      <mat-label>Status</mat-label>
+      <mat-select formControlName="status" required>
+        <mat-option value="Pending">Pending</mat-option>
+        <mat-option value="In Progress">In Progress</mat-option>
+        <mat-option value="Completed">Completed</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Start Time</mat-label>
+        <input
+          matInput
+          [ngxTimepicker]="startTimePicker"
+          formControlName="start_time" 
+          placeholder="Select Start Time"
+          required
+          readonly
+        />
+        <ngx-material-timepicker #startTimePicker></ngx-material-timepicker>
+      </mat-form-field>
+      
+      <mat-form-field>
+        <mat-label>End Time</mat-label>
+        <input
+          matInput
+          [ngxTimepicker]="endTimePicker"
+          formControlName="end_time"    
+          required
+          placeholder="Select End Time"
+          readonly
+        />
+        <ngx-material-timepicker #endTimePicker></ngx-material-timepicker>
+      </mat-form-field>
+    <button mat-raised-button type="submit" color="primary">Update Task</button>
+    <!-- <button mat-button (click)="onCancel()">Cancel</button> -->
+  </div>
+  </form>
+</mat-dialog-content>

@@ -1,0 +1,133 @@
+
+.container{
+padding: 20px;
+background-color: #bdc0bd;
+  width: 550px;
+  align-items: center;
+  // margin-top: 30px;
+  border-radius: 30px;
+margin-top: 10px;
+
+}
+form{
+  background-color: #fdfdfd;
+  border-radius: 10px;
+}
+
+.row{
+  align-items: center;
+  padding: 5px;
+
+}
+
+.col{
+  align-items: center;
+  margin-left: 10px;
+ 
+}
+
+
+button{
+  padding: 12px;
+  border-radius: 50px;
+  // margin: 20px;
+  width: 150px;
+ margin-left: 30px;
+ margin-bottom: 20px;
+
+
+}
+
+
+
+
+
+
+  th{
+    background-color: #a8325e; 
+    color: white;
+    text-align: center;
+   
+  }
+  
+  .table {
+    font-size: 0.9rem; /* Adjust the font size */
+  }
+  
+  .thead-dark {
+    background-color: #343a40;
+    color: #fff;
+  }
+  
+  .edit-icon,
+  .delete-icon {
+    cursor: pointer;
+  }
+  
+  .edit-icon:hover {
+    color: #007bff; /* Bootstrap primary color */
+  }
+  
+  .delete-icon:hover {
+    color: #dc3545; /* Bootstrap danger color */
+  }
+  
+  .alert-info {
+    background-color: hsl(189, 53%, 88%);
+    border-color: #bee5eb;
+    color: #0c5460;
+  }
+  
+//   .table-responsive {
+//     margin-top: 20px; /* Add some space above the table */
+//   }
+  
+  .mat-icon {
+    vertical-align: middle;
+    font-size: 1.2rem; /* Increase icon size slightly */
+    
+  }
+  
+
+
+
+
+// Month wise Reports
+/* Container for the report */
+h2 {
+  text-align: center;
+  margin: 20px 0;
+  color: #3f51b5; /* Material blue */
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+thead {
+  background-color: #3f51b5; /* Material blue */
+  color: white;
+}
+
+th, td {
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #ddd; /* Light border for table cells */
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f9f9f9; /* Alternate row background color */
+}
+
+tbody tr:hover {
+  background-color: #f1f1f1; /* Hover effect for rows */
+}
+
+.alert {
+  margin-top: 20px;
+  text-align: center;
+}
+
+

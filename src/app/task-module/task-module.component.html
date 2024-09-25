@@ -1,0 +1,226 @@
+<mat-card>
+  <mat-card-header>
+    <div class="row">
+      <div class="col-auto me-auto">
+        <h1>Stemz IT App Daily Status Report</h1>
+      </div>
+      <div class="col-auto">
+        <h3>Log out</h3>
+      </div>
+    </div>
+  </mat-card-header>
+</mat-card>
+<mat-tab-group (selectedTabChange)="onTabChange($event)">
+  <mat-tab>
+    <ng-template mat-tab-label>Daily Task Entry</ng-template>
+  
+    <div class="container">
+      <form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
+        <div class="row">
+          <mat-form-field appearance="outline">
+            <mat-label>Task</mat-label>
+            <textarea matInput formControlName="task" required></textarea>
+            <mat-error *ngIf="taskForm.get('task').hasError('required')">
+              Task is required.
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="row">
+          <div class="col">
+            <mat-form-field appearance="outline">
+              <mat-label>Event Type</mat-label>
+              <mat-select formControlName="eventType" required>
+                <mat-option value="Meeting">Meeting</mat-option>
+                <mat-option value="Development">Development</mat-option>
+                <mat-option value="Testing">Testing</mat-option>
+                <mat-option value="Review">Review</mat-option>
+              </mat-select>
+              <mat-error *ngIf="taskForm.get('eventType').hasError('required')">
+                Event Type is required.
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="outline">
+              <mat-label>Status</mat-label>
+              <mat-select formControlName="status" required>
+                <mat-option value="Pending">Pending</mat-option>
+                <mat-option value="In Progress">In Progress</mat-option>
+                <mat-option value="Completed">Completed</mat-option>
+              </mat-select>
+              <mat-error *ngIf="taskForm.get('status').hasError('required')">
+                Status is required.
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <mat-form-field appearance="outline">
+              <mat-label>Start Time</mat-label>
+              <input
+                matInput
+                [ngxTimepicker]="startTimePicker"
+                formControlName="startTime"
+                required
+                placeholder="Select Start Time"
+                readonly
+              />
+              <ngx-material-timepicker
+                #startTimePicker
+              ></ngx-material-timepicker>
+              <mat-error *ngIf="taskForm.get('startTime').hasError('required')">
+                Start Time is required.
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="outline">
+              <mat-label>End Time</mat-label>
+              <input
+                matInput
+                [ngxTimepicker]="endTimePicker"
+                formControlName="endTime"
+                required
+                placeholder="Select End Time"
+                readonly
+              />
+              <ngx-material-timepicker #endTimePicker></ngx-material-timepicker>
+              <mat-error *ngIf="taskForm.get('endTime').hasError('required')">
+                End Time is required.
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+<div class="row">
+  <div class="col">
+  <button mat-raised-button type="button" color="primary" class="btn btn-outline-primary" (click)="clear()">
+   Clear
+  </button>
+</div>
+<div class="col">
+  <button mat-raised-button type="submit" color="primary" class="btn btn-primary">
+    Create Task
+  </button>
+</div>
+</div>
+        
+      </form>
+    </div>
+  </mat-tab>
+
+  <mat-tab>
+    <ng-template mat-tab-label>Day Wise Logs</ng-template>
+    <div class="">
+      <div class="table-responsive">
+        <table
+          class="table table-hover table-bordered"
+          *ngIf="tasks.length > 0; else noTasks"
+        >
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">S.No</th>
+              <th scope="col">Entry Time</th>
+              <th scope="col">Task</th>
+              <th scope="col">Event Type</th>
+              <th scope="col">Start Time</th>
+              <th scope="col">End Time</th>
+              <th scope="col">Status</th>
+              <th scope="col">Total Duration</th>
+              <th scope="col">EDIT</th>
+              <th scope="col">DELETE</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let task of tasks; let i = index">
+              <th scope="row">{{ i + 1 }}</th>
+              <td>{{ task.created_on | date : "hh:mm a" }}</td>
+              <td>{{ task.task }}</td>
+              <td>{{ task.event_type }}</td>
+              <td>{{ convertToDate(task.start_time) | date : "hh:mm a" }}</td>
+              <td>{{ convertToDate(task.end_time) | date : "hh:mm a" }}</td>
+              <td>{{ task.status }}</td>
+              <td>{{ convertDuration(task.total_duration) }}</td>
+              <td>
+                <mat-icon class="edit-icon" (click)="openEditModal(task)"
+                  >edit</mat-icon
+                >
+              </td>
+              <td>
+                <mat-icon class="delete-icon" (click)="deleteTask(task.id)"
+                  >delete</mat-icon
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- No tasks template -->
+      <ng-template #noTasks>
+        <div class="alert alert-info text-center" role="alert">
+          No tasks available.
+        </div>
+      </ng-template>
+    </div>
+  </mat-tab>
+
+  <mat-tab>
+    <ng-template mat-tab-label>Current Month Reports</ng-template>
+    <!-- <div class="container"> -->
+
+    <div *ngFor="let report of monthWiseReports">
+      <h2>{{ report.month | titlecase }}</h2>
+      <!-- Displaying month name in title case -->
+
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th *ngFor="let entry of report.data[0].computedEntries">
+              {{ entry.username | titlecase }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let day of report.data">
+            <td>{{ day.date | date : "dd-MM-yyyy" }}</td>
+            <!-- Format date -->
+            <td *ngFor="let entry of day.computedEntries">
+              {{ entry.total_duration }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- </div> -->
+  </mat-tab>
+
+  <mat-tab>
+    <ng-template mat-tab-label>Over all Efficieny Reports</ng-template>
+    <!-- <h2>Over All Efficiency </h2> -->
+    <!-- src/app/components/month-wise-report/month-wise-report.component.html -->
+
+    <div *ngIf="loading">Loading...</div>
+    <div *ngIf="error">{{ error }}</div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Month</th>
+          <th *ngFor="let month of getMonths()">{{ month }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of getUniqueUsers()">
+          <td>{{ user }}</td>
+          <td *ngFor="let month of getMonths()">
+            {{ getUserPercentage(month, user) || 0 }}%
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </mat-tab>
+</mat-tab-group>

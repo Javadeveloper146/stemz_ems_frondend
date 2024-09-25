@@ -1,0 +1,24 @@
+<div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="col-md-4">
+      <div class="text-center mb-4">
+        <h1 class="h2">Stemz IT Daily Task System</h1>
+        <h3>Enter your login credentials</h3>
+      </div>
+      <div class="form-group">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Username</mat-label>
+          <input matInput placeholder="Enter Your Username" formControlName="username" required>
+        </mat-form-field>
+      </div>
+      <div class="form-group">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Password</mat-label>
+          <input matInput type="password" placeholder="Enter Your Password" formControlName="password" required>
+        </mat-form-field>
+      </div>
+     <div class="row" style="width: 200px;  height:45px">
+        <button type="submit" mat-raised-button color="primary" [disabled]="loginForm.invalid" class="btn btn-success">Login</button>
+      </div>
+    </form>
+  </div>
+  

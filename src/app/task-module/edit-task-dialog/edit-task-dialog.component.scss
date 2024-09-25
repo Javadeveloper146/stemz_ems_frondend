@@ -1,0 +1,61 @@
+/* Ensure the time picker appears above the modal */
+::ng-deep .ngx-material-timepicker {
+    z-index: 1001; /* Make sure this is higher than the dialog */
+  }
+  
+  /* Optional: Style for the dialog container if using a custom class */
+  .custom-dialog-container {
+    z-index: 1000; /* Ensure this is lower than the time picker */
+  }
+  
+  /* Ensure dialog content is properly positioned */
+  .mat-dialog-container {
+    position: relative; /* Ensure relative positioning */
+  }
+  
+
+  
+  
+  th{
+    background-color: #a8325e; 
+    color: white;
+    text-align: center;
+  }
+  
+  .table {
+    font-size: 0.9rem; /* Adjust the font size */
+  }
+  
+  .thead-dark {
+    background-color: #343a40;
+    color: #fff;
+  }
+  
+  .edit-icon,
+  .delete-icon {
+    cursor: pointer;
+  }
+  
+  .edit-icon:hover {
+    color: #007bff; /* Bootstrap primary color */
+  }
+  
+  .delete-icon:hover {
+    color: #dc3545; /* Bootstrap danger color */
+  }
+  
+  .alert-info {
+    background-color: hsl(189, 53%, 88%);
+    border-color: #bee5eb;
+    color: #0c5460;
+  }
+  
+//   .table-responsive {
+//     margin-top: 20px; /* Add some space above the table */
+//   }
+  
+  .mat-icon {
+    vertical-align: middle;
+    font-size: 1.2rem; /* Increase icon size slightly */
+  }
+  
