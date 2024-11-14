@@ -1,0 +1,20 @@
+
+<app-header-component>
+
+</app-header-component>
+
+<div class="chat-container" style="margin-top: 80px;">
+    <h2>Chat Page</h2>
+    <div class="chat-window">
+      <div *ngFor="let message of messages" class="chat-message">
+        <strong>{{ message.user }}:</strong> {{ message.text }}
+      </div>
+    </div>
+    <form (ngSubmit)="sendMessage()">
+      <div class="chat-input">
+        <input [formControl]="messageControl" placeholder="Type your message..." />
+        <button mat-raised-button color="primary" type="submit">Send</button>
+      </div>
+    </form>
+  </div>
+  

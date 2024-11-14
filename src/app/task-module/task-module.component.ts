@@ -6,20 +6,24 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
 import { Router } from '@angular/router';
 import { EditTaskDialogComponent } from './edit-task-dialog/edit-task-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { Observable } from 'rxjs/internal/Observable';
 
-
+declare var bootstrap: any;
 @Component({
   selector: 'app-task-module',
   templateUrl: './task-module.component.html',
   styleUrls: ['./task-module.component.scss']
 })
 export class TaskModuleComponent {
+[x: string]: any;
   tasks: any[] = [];
   taskForm: FormGroup;
+
+  month_task : FormGroup;
   monthWiseReports: any[] = [];
   dates: string[] = [];
-  
-
+  username :any;
+  todayTotalTime: string = '';
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
@@ -34,7 +38,16 @@ export class TaskModuleComponent {
       status: ['', Validators.required],
       startTime: ['', Validators.required],
       endTime: ['', Validators.required]
+     
+      
     });
+   this. month_task =this.fb.group({
+    month: ['', Validators.required],
+   });
+
+
+  
+
   }
 
   ngOnInit(): void {
@@ -42,7 +55,8 @@ export class TaskModuleComponent {
     console.log('User Name:', userDataString);
     const userData = JSON.parse(userDataString);
     console.log('User Name:', userData.username);
-   
+    this.username =userData.username;
+    this.months = this.getMonthNames();
   }
 
   onSubmit() {
@@ -86,10 +100,14 @@ export class TaskModuleComponent {
     }
     if (event.index === 2) {
       console.log('event.index',event.index)
-      this.monthWise_report()
+     this. fetchUserTasks();
     }
     if (event.index === 3) {
       console.log('event.index',event.index)
+      this.monthWise_report()
+      
+    }
+    if(event.index === 4){
       this.month_wise_overall_efficiency()
     }
 
@@ -100,10 +118,13 @@ export class TaskModuleComponent {
     const userData = userDataString ? JSON.parse(userDataString) : null;
 
     const user_id = userData.id;
+
     this.http
       .get(`http://127.0.0.1:8000/api/tasks-user/${user_id}`)
       .subscribe((response: any) => {
         this.tasks = response.tasks; 
+       this.todayTotalTime =response.today_totaltime;
+        console.log("sdgjsd",this.todayTotalTime)
         console.log("sdgjsd",this.tasks)
         this.monthWise_report()
       });
@@ -136,6 +157,7 @@ export class TaskModuleComponent {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.snackBar.open('Task Updated successfully!', 'Close', {
+          duration:400
         });
        
       }
@@ -144,19 +166,32 @@ export class TaskModuleComponent {
     });
 }
 
-deleteTask(taskId: number): void {
-  if (confirm("Are you sure you want to delete this task?")) {
-    this.http.delete(`http://127.0.0.1:8000/api/delete-task/${taskId}`).subscribe(
-      response => {
-        this.tasks = this.tasks.filter(task => task.id !== taskId);
-        console.log('Task deleted successfully');
-      },
-      error => {
-        console.error('Error deleting task:', error);
-      }
-    );
+  taskIdToDelete: number | null = null;
+  openDeleteModal(taskId: number): void {
+    this.taskIdToDelete = taskId;
+    const modal = new bootstrap.Modal(document.getElementById('deleteTaskModal')!);
+    modal.show();
   }
-}
+
+  // Confirm deletion of the task
+  confirmDeleteTask(): void {
+    if (this.taskIdToDelete !== null) {
+      this.http.delete(`http://127.0.0.1:8000/api/delete-task/${this.taskIdToDelete}`).subscribe(
+        () => {
+          this.tasks = this.tasks.filter(task => task.id !== this.taskIdToDelete);
+          console.log('Task deleted successfully');
+          this.taskIdToDelete = null;
+
+          // Close the modal
+          const modal = bootstrap.Modal.getInstance(document.getElementById('deleteTaskModal')!);
+          modal.hide();
+        },
+        error => {
+          console.error('Error deleting task:', error);
+        }
+      );
+    }
+  }
 
 convertToDate(timeString: string): Date {
   const [time, modifier] = timeString.split(' ');
@@ -171,6 +206,35 @@ convertToDate(timeString: string): Date {
   date.setHours(hours, minutes, 0, 0);
   return date;
 }
+months: string[] = [];
+getMonthNames(): string[] {
+  const monthNames = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+  return monthNames;
+}
+
+onSubmitforMonth(){
+  if (this.taskForm.valid) {
+    const selectedMonth = this.taskForm.get('month')?.value;
+    this.fetchMonthWiseData(selectedMonth);
+  }
+}
+
+fetchMonthWiseData(month: string) {
+  this.http.get(`http://127.0.0.1:8000/api/task-duration?month=${month}`)
+    .subscribe(
+      (response: any) => {
+        this.monthWiseReports = response.month_wise_reports;
+        console.log('Month-wise Reports:', this.monthWiseReports);
+      },
+      (error) => {
+        console.error('Error fetching task duration data:', error);
+      }
+    );
+}
+
 
 monthWise_report(){
   this.http.get('http://127.0.0.1:8000/api/task-duration').subscribe(
@@ -268,5 +332,45 @@ getUniqueUsers(): string[] {
   return Array.from(users);
 }
 
+userTasks: any = {}; // Store user tasks
+errorMessage: string | null = null; 
+private apiUrl_all = 'http://127.0.0.1:8000/api/tasks/today';
+
+fetchUserTasks(): void {
+  this.http.get(this.apiUrl_all).subscribe(
+    (response: any) => {
+      console.log('API Response:', response); // Log the entire response
+      this.userTasks = response.user_tasks || {}; // Assign user tasks from response
+      this.errorMessage = null; // Clear any previous error message
+      console.log("this.userTasks", this.userTasks); // Log user tasks
+  // Trigger change detection if needed
+    },
+    (error) => {
+      this.errorMessage = 'Failed to fetch user tasks. Please try again later.'; // Handle error
+      console.error(error); // Log error for debugging
+    }
+  );
 }
 
+objectKeys(obj: any): string[] {
+  return Object.keys(obj); // Utility method to get object keys
+}
+
+
+  openLogoutModal(): void {
+    const modal = new bootstrap.Modal(document.getElementById('logoutModal'));
+    modal.show(); // Show the modal
+  }
+
+  private downloadUrl = 'http://127.0.0.1:8000/api/download-monthly-report/';
+
+  downloadPdf(){
+    this.http.get(this.downloadUrl, { responseType: 'blob' }).subscribe((response: Blob) => {
+      const url = window.URL.createObjectURL(response);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'Month wise IT Team Percentage.pdf';
+      link.click();
+    });
+  }
+}

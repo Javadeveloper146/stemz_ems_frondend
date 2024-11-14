@@ -1,7 +1,7 @@
 
 .container{
 padding: 20px;
-background-color: #bdc0bd;
+background: #075c7a;
   width: 550px;
   align-items: center;
   // margin-top: 30px;
@@ -10,8 +10,9 @@ margin-top: 10px;
 
 }
 form{
-  background-color: #fdfdfd;
+  background-color: #fff;
   border-radius: 10px;
+  padding: 10px 15px;
 }
 
 .row{
@@ -39,25 +40,56 @@ button{
 }
 
 
+h1{
+  font-size: 20px;
+}
 
 
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead {
+  position: sticky;
+  // top: 0;
+  background-color: #f8f9fa; /* Light background for the header */
+  // z-index: 10;
+}
+
+
+tbody {
+  display: block;
+  max-height: 400px; /* Adjust as needed */
+  overflow-y: auto;
+}
+
+thead, tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed; /* Ensures the column width is consistent */
+}
 
 
   th{
-    background-color: #a8325e; 
+    
+    background-color: #6c6266; 
     color: white;
     text-align: center;
    
   }
+  .day{
+    background-color: #6c6266; 
+    color: white;
+    // text-align: center;
+  }
   
   .table {
+    width: 100%;
+    border-collapse: collapse;
     font-size: 0.9rem; /* Adjust the font size */
   }
-  
-  .thead-dark {
-    background-color: #343a40;
-    color: #fff;
-  }
+
   
   .edit-icon,
   .delete-icon {
@@ -96,14 +128,14 @@ button{
 /* Container for the report */
 h2 {
   text-align: center;
-  margin: 20px 0;
+  // margin: 20px 0;
   color: #3f51b5; /* Material blue */
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
+  // margin-top: 20px;
 }
 
 thead {
@@ -112,7 +144,7 @@ thead {
 }
 
 th, td {
-  padding: 10px;
+  padding: 9px;
   text-align: center;
   border: 1px solid #ddd; /* Light border for table cells */
 }
@@ -131,3 +163,25 @@ tbody tr:hover {
 }
 
 
+
+
+.table {
+  width: 100%;
+  margin-bottom: 1rem;
+  color: #212529;
+}
+
+tbody {
+  -ms-overflow-style: none;  /* Hides scrollbar in IE and Edge */
+  scrollbar-width: none;     /* Hides scrollbar in Firefox */
+}
+.table th,
+.table td {
+  padding: 0.75rem;
+  vertical-align: top;
+  border-top: 1px solid #dee2e6;
+}
+
+.alert {
+  margin: 1rem 0;
+}

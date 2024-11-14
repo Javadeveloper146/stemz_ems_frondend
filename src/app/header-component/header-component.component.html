@@ -1,0 +1,182 @@
+
+<header>
+    <mat-toolbar class="toolbar-header">
+        <button mat-icon-button (click)="sidenav.toggle()" matTooltip="Menu">
+            <mat-icon>menu</mat-icon>
+        </button>
+        
+        <span >  Stemz Enterprise Application </span>
+        <span class="toolbar-item-spacer"></span>
+      
+        <!--Chat -->
+       
+        <button mat-icon-button matTooltip="Chat"  routerLink="/chat">
+          <mat-icon>message</mat-icon>
+        </button>
+        <!-- Notifications Button -->
+        <button mat-icon-button matTooltip="Notifications" data-bs-toggle="modal" data-bs-target="#notificationsModal">
+          <mat-icon>notifications</mat-icon>
+        </button>
+
+ 
+    
+        <button mat-icon-button matTooltip="My Account" [matMenuTriggerFor]="userAccountMenu">
+            <mat-icon>account_circle</mat-icon>
+        </button>
+    
+        <mat-menu #userAccountMenu [overlapTrigger]="false" yPosition="below">
+            <button mat-menu-item  data-bs-toggle="modal" data-bs-target="#accountModal">
+                <mat-icon>person</mat-icon><span>My Account</span>
+            </button>
+            <button mat-menu-item data-bs-toggle="modal" data-bs-target="#grievanceModal">
+                <mat-icon>feedback</mat-icon><span>Grievance</span>
+              </button>
+            <button mat-menu-item >
+                <mat-icon>help</mat-icon><span>Help</span>
+            </button>
+          
+            <button mat-menu-item data-bs-toggle="modal" data-bs-target="#logoutModal">
+              <mat-icon>exit_to_app</mat-icon> Logout
+          </button>
+        </mat-menu>
+    </mat-toolbar>
+</header>
+
+
+<!-- Bootstrap Logout Modal -->
+<div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="logoutModalLabel">Logout Confirmation</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to log out? 
+      </div>
+      <div class="modal-body">
+        Session Closed....
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-danger" (click)="logout()">Logout</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+        <!-- GrievanceModal -->
+<div class="modal fade" id="grievanceModal" tabindex="-1" aria-labelledby="grievanceModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="grievanceModalLabel">Submit Grievance</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Grievance Form -->
+          <form (ngSubmit)="submitGrievance()">
+            <div class="mb-3">
+              <label for="grievanceSubject" class="form-label">Subject</label>
+              <input type="text" class="form-control" id="grievanceSubject" [(ngModel)]="grievance.subject" name="subject" required>
+            </div>
+            <div class="mb-3">
+              <label for="grievanceDescription" class="form-label">Description</label>
+              <textarea class="form-control" id="grievanceDescription" rows="3" [(ngModel)]="grievance.description" name="description" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit Grievance</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+        <!-- Account  -->
+        <div class="modal fade" id="accountModal" tabindex="-1" aria-labelledby="accountModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="accountModalLabel" style="color: black;">My Account</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <h2> Welcome {{username}} -  {{role}}</h2>
+                  <p style="color: black;">Account details and options can go here.</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+<!-- Notifications Modal -->
+<div class="modal fade" id="notificationsModal" tabindex="-1" aria-labelledby="notificationsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="notificationsModalLabel">Notifications</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Notification List -->
+          <ul *ngIf="notifications.length > 0; else noNotifications">
+            <li *ngFor="let notification of notifications">
+              {{ notification.message }} <span class="text-muted">({{ notification.time }})</span>
+            </li>
+          </ul>
+          <!-- No Notifications -->
+          <ng-template #noNotifications>
+            <p>No notifications available.</p>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>    
+    <mat-sidenav-container class="app-container">
+        <mat-sidenav #sidenav mode="side" [class.mat-elevation-z4]="true" class="app-sidenav">
+            <mat-nav-list style="padding-top: 65px;">
+                <!-- <mat-list-item routerLink="/nurse-dashboard"  class="list-header">
+                    <mat-icon>dashboard</mat-icon><span>Dashboard</span>
+                </mat-list-item> -->
+                <mat-expansion-panel [class.mat-elevation-z0]="true">
+                    <mat-expansion-panel-header >
+                        Dashboard
+                    </mat-expansion-panel-header >
+                    <mat-nav-list >
+                        <a mat-list-item routerLink="/task" >
+                        <mat-icon>dashboard </mat-icon><span> DSR </span>
+                        </a>
+                        <a mat-list-item routerLink="/allocate_task" >
+                        <mat-icon></mat-icon><span> Allocated Task </span>
+                      </a>
+
+                      <a mat-list-item>
+                        <mat-icon></mat-icon><span> Review Status</span>
+                    </a>
+                        
+                    </mat-nav-list>
+                </mat-expansion-panel>
+
+                <mat-expansion-panel [class.mat-elevation-z0]="true">
+                  <mat-expansion-panel-header >
+                      Last One week Log
+                  </mat-expansion-panel-header >
+                  <mat-nav-list >
+                      <a mat-list-item routerLink="/update_task" >
+                      <mat-icon>dashboard </mat-icon><span> Updated DSR </span>
+                      </a>
+                     
+                      
+                  </mat-nav-list>
+              </mat-expansion-panel>
+                
+            </mat-nav-list>
+            
+        </mat-sidenav>
+    
+
+        
+     
+                

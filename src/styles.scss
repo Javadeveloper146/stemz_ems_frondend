@@ -9,3 +9,46 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;
     // position: fixed !important;
      z-index: 1000 !important;
 }
+.modal-backdrop{
+    z-index: 998 !important;
+}
+
+.modal {
+    z-index: 1050 !important; /* Bootstrap default is 1050 */
+  }
+  
+  .modal-backdrop {
+    z-index: 1040 !important; /* Ensures the backdrop is behind the modal */
+  }
+
+
+.header, .toolbar-header {
+    z-index: 999 !important; /* Ensure this is lower than the modal's z-index */
+  }
+  .mdc-tab--active{
+    background: #075c7a !important;
+    border-radius: 10px;
+    .mdc-tab__content{
+      .mdc-tab__text-label{
+         color: #fff !important;
+      }
+    }
+    .mdc-tab-indicator{
+      display: none !important;
+    }
+  }
+  .mat-mdc-focus-indicator{
+    
+    .mdc-tab__ripple{
+      display: none;
+    }
+  }
+
+
+  // :host {
+  //   display: flex !important;
+  //   justify-content: center !important;
+  //   align-items: center !important;
+  //   height: 100vh !important; // Full height
+  //   background-color: white !important; // Change to a desired color
+  // } 

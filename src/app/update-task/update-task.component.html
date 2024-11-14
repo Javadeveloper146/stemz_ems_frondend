@@ -1,0 +1,183 @@
+<app-header-component>
+
+</app-header-component>
+
+
+<mat-tab-group (selectedTabChange)="onTabChange($event)" style="margin-top: 70px;">
+    <mat-tab>
+      <ng-template mat-tab-label>Last Weekd Task Entry</ng-template>
+    
+      <div class="container">
+        <form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
+  
+          <!-- <h1 style="text-align: center; padding-top:6px" > Welcome {{username}}</h1> -->
+          <div class="row">
+            <mat-form-field appearance="outline">
+              <mat-label>Task</mat-label>
+              <textarea matInput formControlName="task" required></textarea>
+              <mat-error *ngIf="taskForm.get('task').hasError('required')">
+                Task is required.
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="row">
+            <div class="col">
+              <mat-form-field appearance="outline">
+                <mat-label>Event Type</mat-label>
+                <mat-select formControlName="eventType" required>
+                  <mat-option value="Meeting">Meeting</mat-option>
+                  <mat-option value="Development">Development</mat-option>
+                  <mat-option value="Testing">Testing</mat-option>
+                  <mat-option value="Review">Review</mat-option>
+                </mat-select>
+                <mat-error *ngIf="taskForm.get('eventType').hasError('required')">
+                  Event Type is required.
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col">
+              <mat-form-field appearance="outline">
+                <mat-label>Status</mat-label>
+                <mat-select formControlName="status" required>
+                  <mat-option value="Pending">Pending</mat-option>
+                  <mat-option value="In Progress">In Progress</mat-option>
+                  <mat-option value="Completed">Completed</mat-option>
+                </mat-select>
+                <mat-error *ngIf="taskForm.get('status').hasError('required')">
+                  Status is required.
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col">
+                <mat-form-field appearance="outline">
+                    <mat-label>Task Date</mat-label>
+                    <input
+                      matInput
+                      [matDatepicker]="picker"
+                      formControlName="taskDate"
+                      required
+                      [min]="minDate"
+                      [max]="maxDate"
+                    />
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                    <mat-error *ngIf="taskForm.get('taskDate').hasError('required')">
+                      Task Date is required.
+                    </mat-error>
+                  </mat-form-field>
+            </div>
+        </div>
+          <div class="row">
+            <div class="col">
+              <mat-form-field appearance="outline">
+                <mat-label>Start Time</mat-label>
+                <input
+                  matInput
+                  [ngxTimepicker]="startTimePicker"
+                  formControlName="start_time"
+                  required
+                  placeholder="Select Start Time"
+                  readonly
+                />
+                <ngx-material-timepicker
+                  #startTimePicker
+                ></ngx-material-timepicker>
+                <mat-error *ngIf="taskForm.get('start_time').hasError('required')">
+                  Start Time is required.
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col">
+              <mat-form-field appearance="outline">
+                <mat-label>End Time</mat-label>
+                <input
+                  matInput
+                  [ngxTimepicker]="endTimePicker"
+                  formControlName="end_time"
+                  required
+                  placeholder="Select End Time"
+                  readonly
+                />
+                <ngx-material-timepicker #endTimePicker></ngx-material-timepicker>
+                <mat-error *ngIf="taskForm.get('end_time').hasError('required')">
+                  End Time is required.
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+  <div class="row">
+    <div class="col">
+    <!-- <button mat-raised-button type="button" color="primary" class="btn btn-outline-primary" (click)="clear()">
+     Clear
+    </button> -->
+  </div>
+  <div class="col">
+    <button mat-raised-button type="submit" color="primary" class="btn btn-primary">
+      Create Task
+    </button>
+  </div>
+  </div>
+          
+        </form>
+      </div>
+    </mat-tab>
+    <mat-tab>
+        <ng-template mat-tab-label>Last Week Task Log</ng-template>
+<!-- update-task.component.html -->
+<div *ngIf="errorMessage" class="alert alert-danger" >
+    {{ errorMessage }}
+  </div>
+  
+  <div *ngIf="!userTasks || objectKeys(userTasks).length === 0" class="alert alert-info">
+    No tasks available for any users today.
+  </div>
+  
+  <!-- Iterate over users and display their tasks -->
+  <div *ngFor="let user of objectKeys(userTasks)" class="mb-4">
+    <h3 style="padding-left: 10px;">
+      {{ user }} (Task count: {{ userTasks[user]?.length }})
+    </h3>
+    <div *ngIf="!userTasks[user] || userTasks[user].length === 0" class="alert alert-info">
+      No entries for {{ user }}.
+    </div>
+    <table class="table table-bordered" *ngIf="userTasks[user] && userTasks[user].length > 0" style="margin-top: 5px;">
+      <thead >
+        <tr >
+          <th>S.No</th>
+          <th>Event Type</th>
+          <th>Task</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+          <th>Status</th>
+          <th>Edit</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let task of userTasks[user]; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ task.event_type }}</td>
+          <td>{{ task.task }}</td>
+          <td>{{ task.start_time }}</td>
+          <td>{{ task.end_time }}</td>
+          <td>{{ task.status }}</td>
+          <td>
+            <mat-icon class="edit-icon"
+              >edit</mat-icon
+            >
+          </td>
+         <td>
+<mat-icon class="delete-icon" matTooltip="Delete Task">delete</mat-icon>
+</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+    </mat-tab>
+  </mat-tab-group>
+
+

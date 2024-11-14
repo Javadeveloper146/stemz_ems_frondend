@@ -50,6 +50,9 @@ export class EditTaskDialogComponent {
       },
       error: (error) => {
         console.error('Error updating task:', error);
+        this.snackBar.open('Invaild Time ', 'Close', {
+          duration: 3000, // Duration in milliseconds
+        });
       },
     });
     this.dialogRef.close();
